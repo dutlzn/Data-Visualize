@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <input type="file" id="upload">
+    <script>
+        const ACCEPT = ['image/jpg', 'image/png', 'image/jpeg'];
+        const MAXSIZE = 3 * 1024 * 1024;
+        const MAXSIZE_STR = '3mb';
+
+        function covertImageToBase64(file, callback) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.addEventListener('load', function(e) {
+                // 打印base64 string console.log(e.target.result);
+                // console.log(reader.result);
+                const base64Image = reader.result;
+                callback && callback(base64Image);
+                reader = null;
+            })
+        }
+
+        // 压缩
+        function compress(base64Image) {
+            // console.log(base64Image);
+            // 图片的尺寸 + 图片输出的分辨率
+            let maxH = 100;
+            let maxW = 100;
+            const image = new Image();
+            image.addEventListener('load', function(e) {
+                let radio; // 图片压缩比
+                let needCompress = false; // 是否需要压缩
+                // console.log(image.naturalHeight, image.naturalWidth);
+                if (maxW < image.naturalWidth) {
+                    needCompress = true;
+                    radio = image.naturalWidth / maxW;
+                    maxH = image.naturalHeight / radio;
+                }
+
+                if (maxH < image.naturalHeight) {
+                    needCompress = true;
+                    radio = image.naturalHeight / maxH;
+                    maxW = image.naturalHeight / radio;
+                }
+
+                if (!needCompress) {
+                    maxH = image.naturalHeight;
+                    maxW = image.naturalWidth;
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.setAttribute('id', '__compress__');
+                canvas.width = maxW;
+                canvas.height = maxH;
+                canvas.style.visibility = 'hidden';
+                document.body.appendChild(canvas);
+
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, maxW, maxH); // 防止两张图重叠
+                ctx.drawImage(image, 0, 0, maxW, maxH);
+                const compressImage = canvas.toDataURL('iamge/jpeg', 0.9);
+                const _image = new Image();
+                _image.src = compressImage;
+                document.body.append(_image);
+                canvas.remove();
+
+
+
+            });
+            image.src = base64Image; // 独立dom
+            document.body.appendChild(image); // 挂载在body下
+
+        }
+
+        const upload = document.getElementById('upload');
+        upload.addEventListener('change', function(e) {
+            const [file] = e.target.files;
+            // console.log(file);
+            if (!file) {
+                return;
+            }
+            const {
+                type: fileType,
+                size: fileSize
+            } = file;
+
+            if (!ACCEPT.includes(fileType)) {
+                alert('不支持[' + fileType + ']文件类型!');
+                //重置上传
+                upload.value = '';
+                return;
+            }
+
+            if (fileSize > MAXSIZE) {
+                alert('文件大小超过' + MAXSIZE_STR + '的限制');
+                upload.value = '';
+                return;
+            }
+            // 压缩图片
+            covertImageToBase64(file, compress);
+        });
+    </script>
+</body>
+
+</html>
