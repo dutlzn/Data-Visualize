@@ -2,11 +2,22 @@
   <div>
     <common-card title="累计销售额 " value="￥ 2222.22">
       <template>
-        <div class="compare"></div>
+        <div class="compare-wrapper">
+          <div class="compare">
+            <span>日同比</span>
+            <span class="emphasis">7.33%</span>
+            <div class="increase" />
+          </div>
+          <div class="compare">
+            <span>月同比</span>
+            <span class="emphasis">38.89%</span>
+            <div class="decrease" />
+          </div>
+        </div>
       </template>
       <template v-slot:footer>
         <span>昨日销售额</span>
-        <span class="money">￥ 30,000,000</span>
+        <span class="emphasis">￥ 30,000,000</span>
       </template>
     </common-card>
   </div>
@@ -19,13 +30,22 @@ export default {
 </script>
 
 <style scoped>
-.compare {
+.compare-wrapper {
   height: 100%;
-  background: yellow;
+  display: flex;
+  /*垂直居中*/
+  flex-direction: column;
+  justify-content: center;
 }
-.money {
-  margin-left: 5px;
-  color: #333;
-  font-weight: 700;
+.compare {
+  display: flex;
+  align-items: center;
+  height: 50%;
+  font-size: 12px;
+  /* background: yellow; */
+  margin-top: 3px;
+  color: #666;
+
 }
+
 </style>
