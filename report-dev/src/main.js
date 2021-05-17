@@ -3,9 +3,7 @@ import App from './App.vue'
 import router from './router'
 import './plugins/element.js'
 import ECharts from 'echarts'
-
 Vue.config.productionTip = false
-    // 挂载到属性上
 Vue.prototype.$echarts = ECharts
 
 new Vue({
