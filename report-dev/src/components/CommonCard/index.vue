@@ -20,7 +20,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style  scoped>
 /* 属性是一个布尔属性。
 
 如果使用该属性，则样式仅仅应用到 style 元素的父元素及其子元素。 */
