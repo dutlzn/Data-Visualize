@@ -2,7 +2,7 @@
   <div>
     <common-card title="今日交易用户数" value="810,211">
       <template>
-        <!-- <div id="today-users-charts"></div> -->\
+        <!-- <div id="today-users-charts"></div> -->
         <v-chart :options="getOptions()" />
       </template>
       <template v-slot:footer>
