@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    main view
     <top-view />
     <sales-view />
     <bottom-view />
