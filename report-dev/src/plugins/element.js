@@ -1,8 +1,7 @@
 import Vue from 'vue'
-import { Button, 
-         Card,
-        Row, Col, Menu, MenuItem, Radio, RadioGroup, DatePicker, RadioButton} from 'element-ui'
-        
+import { Button,Card,Row, Col, Menu, MenuItem, Radio, RadioGroup, DatePicker, RadioButton,
+ Table, TableColumn, Pagination} from 'element-ui'
+
 Vue.use(Button)
 Vue.use(Card)
 Vue.use(Row)
@@ -13,3 +12,6 @@ Vue.use(Radio)
 Vue.use(RadioGroup)
 Vue.use(DatePicker)
 Vue.use(RadioButton)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
