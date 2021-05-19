@@ -32,21 +32,19 @@
                   label="关键词"
                   width="”180"
                 ></el-table-column>
-                <el-table-column
-                  prop="count"
-                  label="搜索量"
-                ></el-table-column>
+                <el-table-column prop="count" label="搜索量"></el-table-column>
                 <el-table-column
                   prop="users"
                   label="搜索用户数"
                 ></el-table-column>
               </el-table>
-              <el-pagination 
-              layout="prev,pager,next" 
-              :total="4" 
-              :page-size="1" 
-              background
-              @current-change="onPageChange"></el-pagination>
+              <el-pagination
+                layout="prev,pager,next"
+                :total="4"
+                :page-size="1"
+                background
+                @current-change="onPageChange"
+              ></el-pagination>
             </div>
           </div>
         </template>
@@ -67,7 +65,9 @@
         </template>
 
         <template>
-          <v-chart :options="categoryOption" />
+          <div class="chart-wrapper">
+            <v-chart :options="categoryOption" />
+          </div>
         </template>
       </el-card>
     </div>
@@ -75,10 +75,130 @@
 </template>
 <script>
 export default {
+  mounted() {
+    this.renderPieChart();
+  },
   methods: {
     onPageChange(page) {
       // console.log(page);
-    }
+    },
+
+    renderPieChart() {
+      const mockData = [
+        {
+          legendname: "粉面粥店",
+          percent: "25%",
+          value: 100,
+          name: "粉面粥店 | 25%",
+        },
+        {
+          legendname: "烤肉饭",
+          percent: "25%",
+          value: 200,
+          name: "烤肉饭 | 25%",
+        },
+        {
+          legendname: "快餐",
+          percent: "25%",
+          value: 300,
+          name: "快餐 | 25%",
+        },
+        {
+          legendname: "焗饭",
+          percent: "25%",
+          value: 50,
+          name: "焗饭 | 25%",
+          itemStyle: {
+            color: "blue",
+          },
+        },
+      ];
+      this.categoryOption = {
+        title: [
+          {
+            text: "品类分布",
+            textStyle: {
+              fontSize: 14,
+              color: "#666",
+            },
+            left: 20,
+            top: 20,
+          },
+          {
+            text: "累计订单量",
+            subtext: "320",
+            x: "34.5%",
+            y: "42.5%",
+            textAlign: "center",
+            textStyle: {
+              fontSize: 14,
+              color: "#999",
+            },
+            subtextStyle: {
+              fontSize: 28,
+              color: "#333",
+            },
+          },
+        ],
+        tooltip: {
+          trigger: "item",
+          formatter: function (params) {
+            const str =
+              params.seriesName +
+              "<br />" +
+              params.marker +
+              params.data.legendname +
+              "<br />" +
+              "数量：" +
+              params.data.value +
+              "<br />" +
+              "占比：" +
+              params.data.percent +
+              "%";
+            return str;
+          },
+        },
+        legend: {
+          type: "scroll",
+          orient: "vertical",
+          height: 250,
+          left: "70%",
+          top: "middle",
+          textStyle: {
+            color: "#8c8c8c",
+          },
+        },
+        series: [
+          {
+            name: "品类分布",
+            type: "pie",
+            data: mockData,
+            label: {
+              normal: {
+                show: true,
+                position: "outter",
+                formatter: function (params) {
+                  return params.data.legendname;
+                },
+              },
+            },
+            center: ["35%", "50%"],
+            radius: ["45%", "60%"],
+            itemStyle: {
+              borderWidth: 4,
+              borderColor: '#fff'
+            },
+            labelLine: {
+              normal: {
+                length: 5,
+                length2: 3,
+                smooth: true,
+              },
+            },
+          },
+        ],
+      };
+    },
   },
   data() {
     return {
@@ -214,6 +334,10 @@ export default {
   padding: 0 10px;
 }
 
+.chart .echarts {
+  height: 50px;
+}
+
 .chart-title {
   color: #999;
   font-size: 14px;
@@ -230,10 +354,6 @@ export default {
   flex: 1;
   margin-top: 20px;
   padding: 0 20px 20px;
-}
-
-.echarts {
-  height: 50px;
 }
 
 .el-pagination {
